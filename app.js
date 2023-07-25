@@ -4,6 +4,8 @@ const cors = require('cors');
 
 const signupRoute = require('./routes/signup');
 const loginRoute = require('./routes/login');
+const chatRoute = require('./routes/chat');
+
 
 
 const app = express();
@@ -21,6 +23,8 @@ app.use(cors({
 
 app.use(signupRoute);
 app.use(loginRoute);
+app.use(chatRoute);
+
 
 
 app.listen(process.env.PORT || 3000);

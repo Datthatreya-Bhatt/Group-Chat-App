@@ -26,9 +26,30 @@ const User = sequelize.define('user',{
     password:{
         type: DataTypes.STRING,
         allowNull: false
+    },
+    loggedIn:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 })
 
+const Chat = sequelize.define('chat',{
+    id:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        unique: true,
+        primaryKey: true
+    },
+    message:{
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+})
+
+
+User.hasMany(Chat);
+Chat.belongsTo(User);
 
 async function createTable(obj){
     try{
@@ -43,12 +64,15 @@ async function createTable(obj){
 
 const execute = async ()=>{
     await createTable(User);
+    await createTable(Chat);
+
 }
 
 execute();
 
 module.exports = {
-    User: User
+    User: User,
+    Chat: Chat
 }
 
 

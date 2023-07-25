@@ -39,7 +39,8 @@ exports.postSignup = async (req,res,next)=>{
                         name: name,
                         email: email,
                         phoneNumber: number,
-                        password: hash
+                        password: hash,
+                        loggedIn: false
                     },{
                         transaction: t
                     })
