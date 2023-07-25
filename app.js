@@ -1,5 +1,6 @@
 const express = require('express');
 const parser = require('body-parser');
+const cors = require('cors');
 
 const signupRoute = require('./routes/signup');
 
@@ -10,6 +11,11 @@ app.use(express.static('public'));
 
 app.use(parser.urlencoded({extended:false}));
 app.use(parser.json());
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 
 app.use(signupRoute);
 

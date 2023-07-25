@@ -11,7 +11,7 @@ document.getElementById('button').addEventListener('click',async()=>{
 
     if(res.data === 'success'){
 
-        alert('User Created Successfully');
+        alert("Successfuly signed up");
 
     }else if(res.data === 'fill all field'){
         
@@ -22,8 +22,8 @@ document.getElementById('button').addEventListener('click',async()=>{
         alert('Something went wrong,Please Try after sometimes');
 
     }else if(res.data === 'user already exists'){
-        
-        alert('user already exists');
+
+        alert( "User already exists, Please Login");
     }
 
 });
