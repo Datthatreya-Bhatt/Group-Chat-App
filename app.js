@@ -3,6 +3,8 @@ const parser = require('body-parser');
 const cors = require('cors');
 
 const signupRoute = require('./routes/signup');
+const loginRoute = require('./routes/login');
+
 
 const app = express();
 
@@ -18,5 +20,7 @@ app.use(cors({
 }));
 
 app.use(signupRoute);
+app.use(loginRoute);
+
 
 app.listen(process.env.PORT || 3000);
