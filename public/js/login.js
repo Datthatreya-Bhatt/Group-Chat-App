@@ -10,4 +10,16 @@ document.getElementById('button').addEventListener('click',async()=>{
     })
 
     console.log(res);
+
+    if(res.data === 'email incorrect'){
+        alert('User not found');
+    }
+    else if(res.data === 'password inccorect'){
+        alert('User not authorized');
+    }
+    else if(res.data.token){
+        let token = res.data.token;
+        localStorage.setItem('token',`${token}`);
+        
+    }
 })
