@@ -58,8 +58,10 @@ exports.getMessages = async (req,res,next)=>{
             attributes: ['message', 'name']
         });
 
+        let count = await Chat.count();
 
-        res.send({user: user, message: message});
+
+        res.send({user: user, message: message, count: count});
         
     }catch(err){
         console.trace(err);
