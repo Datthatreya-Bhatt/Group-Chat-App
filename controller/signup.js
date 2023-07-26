@@ -45,7 +45,8 @@ exports.postSignup = async (req,res,next)=>{
                         transaction: t
                     })
 
-                    res.send('success');
+                    //res.send('success');
+                    res.redirect('/login');
                     await t.commit();
 
                     

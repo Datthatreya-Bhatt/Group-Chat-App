@@ -9,6 +9,8 @@ exports.auth = async(req,res,next)=>{
         if(id){            
             req.userId = id;
             next()
+        }else{
+            console.trace('something went wrong in id')
         }
       
     }catch(err){
