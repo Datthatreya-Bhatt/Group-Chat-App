@@ -10,12 +10,11 @@ exports.chatPage = (req,res,next)=>{
 
 
 exports.postChat = async(req,res,next)=>{
-    console.trace(111111111)
     let {text} = req.body;
     let t = await sequelize.transaction();
     let id = req.userId;
 
-    console.trace(req.userId, text);
+    //console.trace(req.userId, text);
     try{
 
         let user = await User.findOne({
@@ -46,7 +45,8 @@ exports.postChat = async(req,res,next)=>{
 exports.getMessages = async (req,res,next)=>{
 
     try{
-
+        let id = req.params.id;
+        console.trace(id);
         let user = await User.findAll({
             attributes :['name'],
             where: {
@@ -55,11 +55,14 @@ exports.getMessages = async (req,res,next)=>{
         });
 
         let message = await Chat.findAll({
-            attributes: ['message', 'name']
+            attributes: ['id','message', 'name'],
+            offset: Number(id),
+            
         });
 
         let count = await Chat.count();
 
+        console.log(message);
 
         res.send({user: user, message: message, count: count});
         

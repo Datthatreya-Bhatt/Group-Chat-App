@@ -5,6 +5,8 @@ const cors = require('cors');
 const signupRoute = require('./routes/signup');
 const loginRoute = require('./routes/login');
 const chatRoute = require('./routes/chat');
+const counttRoute = require('./routes/count');
+
 
 
 
@@ -24,6 +26,7 @@ app.use(cors({
 app.use(signupRoute);
 app.use(loginRoute);
 app.use(chatRoute);
+app.use(counttRoute);
 
 
 
