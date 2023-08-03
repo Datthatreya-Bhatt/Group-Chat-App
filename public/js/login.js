@@ -18,8 +18,11 @@ document.getElementById('button').addEventListener('click',async()=>{
         alert('User not authorized');
     }
     else if(res.data.token){
-        let token = res.data.token;
-        console.log(111111111111111)
+        //console.log(res.data);
+        let token = res.data;
+        token.user = email;
+        token.connected = null;
+        token = JSON.stringify(token);
         localStorage.setItem('token',`${token}`);
         location.href = 'http://localhost:3000/chat';
         

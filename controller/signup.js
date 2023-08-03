@@ -1,5 +1,6 @@
 const path = require('path');
 const bcrypt = require('bcrypt');
+const {Op} = require('sequelize');
 
 const {User} = require('../models/database');
 const sequelize = require('../models/sequelize');
@@ -19,7 +20,10 @@ exports.postSignup = async (req,res,next)=>{
 
             let data = await User.findOne({
                 where:{
-                    email: email
+                    [Op.or]: [
+                        {email: email},
+                        {phoneNumber: number}
+                    ]
                 }
             })
 
@@ -40,13 +44,12 @@ exports.postSignup = async (req,res,next)=>{
                         email: email,
                         phoneNumber: number,
                         password: hash,
-                        loggedIn: false
                     },{
                         transaction: t
                     })
 
-                    //res.send('success');
-                    res.redirect('/login');
+                    res.send('success');
+                    //res.redirect('/login');
                     await t.commit();
 
                     

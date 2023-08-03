@@ -5,7 +5,10 @@ const cors = require('cors');
 const signupRoute = require('./routes/signup');
 const loginRoute = require('./routes/login');
 const chatRoute = require('./routes/chat');
-const counttRoute = require('./routes/count');
+const joinGroupRoute = require('./routes/joinGroup');
+const createGroupRoute = require('./routes/createGroup');
+const liveChatRoute = require('./routes/liveMessage');
+
 
 
 
@@ -26,8 +29,9 @@ app.use(cors({
 app.use(signupRoute);
 app.use(loginRoute);
 app.use(chatRoute);
-app.use(counttRoute);
-
+app.use(joinGroupRoute);
+app.use(createGroupRoute);
+app.use(liveChatRoute);
 
 
 app.listen(process.env.PORT || 3000);

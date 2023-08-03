@@ -12,6 +12,7 @@ document.getElementById('button').addEventListener('click',async()=>{
     if(res.data === 'success'){
 
         alert("Successfuly signed up");
+        location.href = `${url}/login`;
 
     }else if(res.data === 'fill all field'){
         

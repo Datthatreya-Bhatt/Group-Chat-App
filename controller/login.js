@@ -40,9 +40,9 @@ exports.postLogin = async (req,res,next)=>{
 
                 })
 
-                console.trace(token, hash);
+                //console.trace(token, hash);
                 
-                res.send({token: token});
+                res.send({token: token, cred:null});
             }
             else{
                 res.send('password inccorect');
