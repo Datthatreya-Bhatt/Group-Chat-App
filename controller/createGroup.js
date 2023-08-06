@@ -2,7 +2,7 @@ const path = require('path');
 const {v4: uuid } = require('uuid');
 
 
-const {Group, Contact} = require('../models/database');
+const {Group} = require('../models/database');
 const sequelize = require('../models/sequelize');
 
 
@@ -14,14 +14,14 @@ exports.getCreateGropPage = (req,res,next)=>{
 }
 
 exports.createGroup = async(req,res,next)=>{
-    let {name} = req.body;
-    let user = req.userId.user;
     let t = await sequelize.transaction();
-    let uid = uuid();
-    let link = `${url}/join/${uid}`;
-    
+
 
     try{
+        let {name} = req.body;
+        let user = Number( req.userId.token);
+        let uid = uuid();
+        let link = `${url}/join/${uid}`;
 
         //find name of group if not exist then create
         let data = await Group.findOrCreate({
@@ -31,24 +31,24 @@ exports.createGroup = async(req,res,next)=>{
             defaults: {
                 name: name,
                 link: link,
-                admin: user
+                createdBy: user
              },
              transaction: t
 
         })
+        //adding relation in junction table
+        await data[0].addUser(user, {
+            through: { admin: true }, // Setting admin to true for the user who created the group
+            transaction: t,
+          });
 
-        let contact = await Contact.create({
-            from: user,
-            group: name
-        })
-
-        if(data[0].admin != user){
+        if(data[0].createdBy != user){
             res.send('failed');
         }
         else{
             res.send(data[0]);
         }
-
+        console.trace(data);
         await t.commit();
 
     }catch(err){
@@ -56,3 +56,5 @@ exports.createGroup = async(req,res,next)=>{
         console.trace(err);
     }
 };
+
+

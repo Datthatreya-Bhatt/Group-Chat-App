@@ -1,8 +1,7 @@
 const path = require('path');
-const {Op} = require('sequelize');
 
 const sequelize = require('../models/sequelize');
-const {User,Chat,Contact} = require('../models/database');
+const {User,Chat,Group} = require('../models/database');
 
 
 
@@ -12,23 +11,22 @@ exports.chatPage = (req,res,next)=>{
 
 
 exports.postChat = async(req,res,next)=>{
-    let {text} = req.body;
     let t = await sequelize.transaction();
-    let id = Number(req.userId.token);
 
-    //console.trace(req.userId, text);
+
     try{
+        let {text} = req.body;
+        let id = Number(req.userId.token);
+        let connected = Number(req.userId.connected);
 
-        let user = await User.findOne({
-            where: {
-                id: id
-            }
-        })
+        console.trace(id, connected, text);
 
         let chat = await Chat.create({
             message: text,
+            from: id,
+            to: connected,
             userId: id,
-            name: user.name
+            groupId: connected
         },{transaction: t}
         );
 
@@ -43,31 +41,30 @@ exports.postChat = async(req,res,next)=>{
 
 }
 
-exports.getContacts = async(req,res,next)=>{
-    let user = req.userId.user;
-    console.trace(user);
+exports.getGroups = async(req,res,next)=>{
     
     try{
-        let contacts = await Contact.findAll({
-            // include: [{model: User, }],
+        
+        let id = Number(req.userId.token);
+        console.trace(id);
+
+        let groups = await User.findAll({
+            attributes: ['id'],
             where: {
-               [Op.or]: [
-                    {from: user},
-                    {to: user}
-               ],
-            // include: {
-            //      model: User,
-            //      attributes: ['name'] 
-            //    }
+                id: id
+            },
+            include: {
+                model: Group
             }
             
         })
-        if(contacts){
-            console.trace(contacts);
-            res.send(contacts);    
+
+        if(groups.length > 0){
+            console.trace(groups);
+            res.send(groups);    
         }
         else{
-            console.trace(contacts);
+            console.trace(groups);
             res.send('no contacts');
         }
     }catch(err){
@@ -77,107 +74,21 @@ exports.getContacts = async(req,res,next)=>{
 
 };
 
-exports.getFriend = async(req,res,next)=>{
-    let cred = req.body.cred;
-    console.trace(cred);
+
+exports.getGroupChat = async (req,res,next)=>{
+    
     try{
-        let user = await User.findOne({
-            where: {
-                [Op.or]: [
-                    {email: cred}
-                ]
-            }
-        })
+        let connected = Number(req.userId.connected);
+        console.trace(connected);
 
-        if(user.email === cred || user.phoneNumber ===  Number(cred)){
-            //console.trace(user);
-            res.send('found');
-        }
-        else{
-            console.trace(user);
-            res.send('not found');
-        }
-    }catch(err){
-        console.trace(err);
-    }
-};
-
-exports.addContact = async(req,res,next)=>{
-    let connected = req.body.email;
-    let  user = req.userId.user;
-    let t = await sequelize.transaction();
-
-    console.trace(connected, user);
-
-    //console.trace(email, id);
-
-    try{
-        
-        let data = await Contact.findOrCreate({
-            where: {
-                [Op.or]: [
-                    {from: user, to: connected},
-                    {from: connected, to: user}
-                ]
-            },
-            defaults: {
-               from: user,
-               to: connected
-            },
-            transaction: t
-        })
-
-        //console.trace(data);
-        res.send(data);
-        await t.commit();
-
-    }catch(err){
-        await t.rollback()
-        console.trace(err);
-    }
-}
-
-
-exports.getIndividualChat = async (req,res,next)=>{
-    let user = req.userId.user;
-    let connected = req.userId.connected;
-
-    console.trace(user, connected);
-
-    try{
         let data = await Chat.findAll({
             attributes : ['id','message', 'from', 'to'], 
             where: {
-                [Op.or]: [
-                    {from: user, to:connected},
-                    {from: connected, to: user}
-                ]
-                
-            }
-        })
-
-        console.trace(data);
-        res.send(data);
-
-    }catch(err){
-        console.trace(err);
-    }
-
-};
-
-
-
-exports.getGroupChat = async (req,res,next)=>{
-    let connected = req.userId.connected;
-
-    console.trace(connected);
-
-    try{
-        let data = await Chat.findAll({
-            attributes : ['id','message', 'from', 'group'], 
-            where: {
-                    group: connected
-            }
+                    to: connected
+            },
+            include: [
+                {model: User, attributes: ['name']},
+            ]
         })
 
         console.trace(data);
@@ -189,56 +100,6 @@ exports.getGroupChat = async (req,res,next)=>{
 };
 
 
-exports.postIndividualChat = async (req,res,next)=>{
-    let user = req.userId.user;
-    let connected = req.userId.connected;
-    let {text} = req.body;
 
-    console.trace(typeof(user), typeof(connected), typeof(text));
-
-    try{
-
-        let data = await Chat.create({
-            message: text,
-            from: user,
-            to: connected
-
-        })
-
-        console.trace(data);
-        res.send(data);
-
-    }catch(err){
-        console.trace(err);
-    }
-
-};
-
-
-
-exports.postGroupChat = async (req,res,next)=>{
-    let user = req.userId.user;
-    let connected = req.userId.connected;
-    let {text} = req.body;
-
-
-    console.trace(user, connected, text);
-
-    try{
-        let data = await Chat.create({
-            message: text,
-            from: user,
-            group: connected
-
-        })
-
-
-        console.trace(data);
-        res.send(data);
-        
-    }catch(err){
-        console.trace(err);
-    }
-};
 
 

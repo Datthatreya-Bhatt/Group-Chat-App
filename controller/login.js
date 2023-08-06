@@ -13,10 +13,10 @@ exports.loginPage = (req,res,next)=>{
 }
 
 exports.postLogin = async (req,res,next)=>{
-    let {email, password} = req.body;
     let t = await sequelize.transaction();
 
     try{
+        let {email, password} = req.body;
 
         let user = await User.findOne({
             where: {

@@ -12,22 +12,26 @@ window.addEventListener('DOMContentLoaded',async()=>{
     console.log(res);
     
     let card = document.getElementById('card');
-    let h = document.getElementById('groupName');
-    h.innerHTML += res.data.name;
+    card.innerHTML = `
+    <h5 class="card-title">Join Group</h5>
 
+    <h6 id="groupName">You have been invited to join ${res.data.name}</h6>
+
+    <button id="button" class="btn btn-primary" >Join</button>
+    <button id="cancel" class="btn btn-primary" >Cancel</button>`;
+    
     token = JSON.parse(token);
     token.connected = res.data.name;
     token = JSON.stringify(token);
     localStorage.setItem('token', token);
 
-    card.appendChild(h);
-    
+   
     document.getElementById('button').addEventListener('click', async ()=>{
         let token = localStorage.getItem('token');
         axios.defaults.headers.common['Authorization'] = token;
 
         let res = await axios.get(`${url}/join`);
-        console.log(res);
+        //console.log(res);
         location.href = `${url}/chat`;
     })
     

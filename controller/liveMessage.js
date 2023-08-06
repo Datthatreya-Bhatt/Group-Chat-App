@@ -1,45 +1,25 @@
-const {Op} = require('sequelize');
-
-const {Chat} = require('../models/database');
-
-exports.getLiveIndividual = async(req,res,next) =>{
-    let skip = Number(req.params.id);
-    let user = req.userId.user;
-    let connected = req.userId.connected;
-
-   // console.trace(skip, user, connected);
-
-    try{
-        let data = await Chat.findAll({
-            offset: skip,
-            where: {
-                [Op.or]: [
-                    {from: user, to: connected },
-                    {from: connected, to: user}
-                ]
-            }
-        })
-
-        res.send(data);
-
-    }catch(err){
-        console.trace(err);
-    }
-}
+const {Chat,User} = require('../models/database');
 
 exports.getLiveGroup = async(req,res,next) =>{
-    let skip = Number(req.params.id);
-    let connected = req.userId.connected;
-    
-   // console.trace(skip,connected);
 
     try{
+        let skip = Number(req.params.id);
+        let connected = Number(req.userId.connected);
+        
+       console.trace(skip,connected);
+    
         let data = await Chat.findAll({
+            attributes: ['id', 'message', 'from', 'to'],
             offset: skip,
             where: {
-                group: connected
-            }
+                to: connected
+            },
+            include: [
+                {model: User, attributes: ['name']}
+            ]
         })
+
+        //console.trace(data);
 
         res.send(data);
 

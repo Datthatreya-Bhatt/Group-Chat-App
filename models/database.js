@@ -42,15 +42,11 @@ const Chat = sequelize.define('chat',{
         allowNull: false
     },
     from:{
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    to:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    group: {
-        type: DataTypes.STRING,
+    to: {
+        type: DataTypes.INTEGER,
         allowNull: true
     }
 })
@@ -72,76 +68,55 @@ const Group = sequelize.define('group',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    admin: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-});
-
-
-const Contact = sequelize.define('contact',{
-    id: {
+    createdBy: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        unique: true
-    },
-     from:{
-        type: DataTypes.STRING,
         allowNull: false
-    },
-    to:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    group: {
-        type: DataTypes.STRING,
-        allowNull: true
     }
+ });
+
+ const GroupsUser = sequelize.define('groupsUser',{
+    admin:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    }
+ })
+ 
 
 
-})
+//user and chat relation, one to many
+User.hasMany(Chat);
+Chat.belongsTo(User);
 
 
-// user and contacts many to many because we need contacts name in place of from and to
+//group  and chat relation, one to many
+Group.hasMany(Chat);
+Chat.belongsTo(Group);
+
+//Groups and user relation, many to many
+Group.belongsToMany(User, {through: GroupsUser});
+User.belongsToMany(Group, {through: GroupsUser});
 
 
 
 
-
-
-
-
-
-async function createTable(obj){
+async function createTable(){
     try{
-        await obj.sync({force: false});
+        await sequelize.sync({force: false});
 
-        console.log(`${obj} tables created successfully`);
+        console.log(`tables created successfully`);
     }catch(err){
         console.trace(err);
     }
 }
 
+createTable();
 
-const execute = async ()=>{
-    await createTable(User);
-    await createTable(Chat);
-    await createTable(Group);
-    await createTable(Contact);
-   // await createTable(Notification);
-
-
-
-}
-
-execute();
 
 module.exports = {
     User: User,
     Chat: Chat,
     Group: Group,
-    Contact: Contact,
+    GroupsUser: GroupsUser
 }
-
 

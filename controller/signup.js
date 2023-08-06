@@ -11,8 +11,9 @@ exports.signupPage = (req,res,next)=>{
 } 
 
 exports.postSignup = async (req,res,next)=>{
-    const {name,email,number,password} = req.body;
     const t = await sequelize.transaction();
+    const {name,email,number,password} = req.body;
+
 
     if(name.length>0 && email.length>0 && number.length>0 && password.length>0){
 

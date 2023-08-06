@@ -1,6 +1,6 @@
 const path = require('path');
 
-const {Group, Contact} = require('../models/database');
+const {Group} = require('../models/database');
 const sequelize = require('../models/sequelize');
 
 exports.getJoinGropPage = (req,res,next)=>{
@@ -8,8 +8,9 @@ exports.getJoinGropPage = (req,res,next)=>{
 }
 
 exports.getGroupName = async(req,res,next)=>{
-    let {link} = req.body;
+
     try{
+        let {link} = req.body;
         let name = await Group.findOne({
             attributes: ['name', 'link'],
             where: {
@@ -28,24 +29,22 @@ exports.getGroupName = async(req,res,next)=>{
 
 
 exports.joinGroup = async(req,res,next)=>{
-    let user = req.userId.user;
-    let connected = req.userId.connected;
     let t = await sequelize.transaction();
+    //let t2 = await sequelize.transaction();
 
-    console.trace(user, connected);
+
     try{
-        let data = await Contact.findOrCreate({
-            where: {
-                from: user,
-                group: connected
-            },
-            defaults: {
-                from: user,
-                group: connected
-            },
-            transaction: t
+        let user = Number(req.userId.token);
+        let connected = req.userId.connected;
+        console.trace(user, connected);
 
+        let data = await Group.findOne({
+            where: {
+                name: connected
+            }
         })
+
+        await data.addUser(user, {transaction: t});
 
         res.send(data);
         await t.commit();

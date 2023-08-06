@@ -20,7 +20,6 @@ document.getElementById('button').addEventListener('click',async()=>{
     else if(res.data.token){
         //console.log(res.data);
         let token = res.data;
-        token.user = email;
         token.connected = null;
         token = JSON.stringify(token);
         localStorage.setItem('token',`${token}`);
