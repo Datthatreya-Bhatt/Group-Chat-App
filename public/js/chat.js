@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded',async()=>{
 
-    let url = 'http://localhost:3000';
+    let url = 'http://18.207.218.243';
+
 
     // in future im planning to use linked list rather than using array in local storage
 

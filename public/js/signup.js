@@ -1,4 +1,5 @@
-let url = 'http://localhost:3000';
+let url = 'http://18.207.218.243';
+
 
 document.getElementById('button').addEventListener('click',async()=>{
     let name = document.getElementById('name').value;
