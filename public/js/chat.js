@@ -1,8 +1,15 @@
+
+
 window.addEventListener('DOMContentLoaded',async()=>{
+
 
     let url = 'http://localhost:3000';
 
     // in future im planning to use linked list rather than using array in local storage
+
+    // to connecting backend server
+    const socket = io('http://localhost:3001');
+
 
     let token = localStorage.getItem('token');
     axios.defaults.headers.common['Authorization'] = token;
@@ -18,10 +25,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
     });
 
     let data = await axios.get(`${url}/chat/groups`);
-    // console.log(data);
-    // console.log(data.data[0].groups);
-    // console.log(data.data[0].groups[0].groupsUser.admin);
-
+    
     if(data.data === 'no contacts'){
         alert('You are not part of any groups, create a groups and invite your friends');
 
@@ -66,12 +70,49 @@ window.addEventListener('DOMContentLoaded',async()=>{
 
                     }
 
+                   
 
+                    socket.emit('join-group', header);
+
+                    socket.on('join-group-failed', err =>{
+                        alert(err);
+                    });
+
+                                        
+                    socket.on('receive-msg',(msg)=>{
+                        let right = document.getElementById('right');
+
+                        let div =  document.createElement('div');
+                        div.className = "alert alert-primary";
+
+                        
+                        div.innerHTML = `${msg}`;
+                        right.appendChild(div);
+                    });
 
                     document.getElementById('send').addEventListener('click', async ()=>{
+                        let user = localStorage.getItem('token');
+                        user = JSON.parse(user);
+
                         let text = document.getElementById('text').value;
-                        let res = await axios.post(`${url}/chat`,{text:text});
+                        //let res = await axios.post(`${url}/chat`,{text:text});
                        // console.log(text, res);
+                       socket.emit('send-msg',text, header);
+
+                       let right = document.getElementById('right');
+
+                       let div =  document.createElement('div');
+                       div.className = "alert alert-primary";
+
+                       
+                       div.innerHTML = `${user.userName}: ${text}`;
+                       right.appendChild(div);
+
+
+
+                       socket.emit('send-msg-failed', err =>{
+                            alert(err);
+                       });
                     })
 
 
@@ -82,23 +123,20 @@ window.addEventListener('DOMContentLoaded',async()=>{
                     //show data on screen
                     let right = document.getElementById('right');
                     right.innerHTML = '';
-                    let id = 0;
                     res.data.forEach(element =>{
                         let div =  document.createElement('div');
                         div.className = "alert alert-primary";
 
-                        //console.log(element.id);
-                        // console.log(element.user.name);
-                        id = element.id;
                         div.innerHTML = `${element.user.name}: ${element.message}`;
                         right.appendChild(div);
                     
                     })
 
-                    id = JSON.stringify(id);
-                    localStorage.setItem('id', id);
 
-                    setInterval(listener, 1000);
+
+
+                    
+
 
                 }catch(err){
                     console.log(err);
@@ -116,29 +154,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
 
     }
 
-async function listener(){
-    let id = localStorage.getItem('id');
-    id = Number(JSON.parse(id));
-    let res = await axios.get(`${url}/g/${id}`);
-    //console.log(res);
 
-    res.data.forEach(element =>{
-        console.log(element);
-
-        id = element.id;
-        let right = document.getElementById('right');
-        let div = document.createElement('div');
-        div.className = "alert alert-primary";
-        div.innerHTML = `${element.user.name}: ${element.message}`;
-
-        right.appendChild(div);
-
-    })
-
-    id = JSON.stringify(id);
-    localStorage.setItem('id',id);
-    
-};
   
 })
 

@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 
-router.get('/g/:id',auth.auth,liveMessageController.getLiveGroup);
+//router.get('/live',auth.auth,liveMessageController.getLiveGroup);
 
 
 

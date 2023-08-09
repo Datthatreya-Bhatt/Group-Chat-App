@@ -46,7 +46,7 @@ exports.getGroups = async(req,res,next)=>{
     try{
         
         let id = Number(req.userId.token);
-        console.trace(id);
+        //console.trace(id);
 
         let groups = await User.findAll({
             attributes: ['id'],
@@ -60,7 +60,7 @@ exports.getGroups = async(req,res,next)=>{
         })
 
         if(groups.length > 0){
-            console.trace(groups);
+            //console.trace(groups);
             res.send(groups);    
         }
         else{
@@ -79,7 +79,7 @@ exports.getGroupChat = async (req,res,next)=>{
     
     try{
         let connected = Number(req.userId.connected);
-        console.trace(connected);
+        //console.trace(connected);
 
         let data = await Chat.findAll({
             attributes : ['id','message', 'from', 'to'], 
@@ -91,7 +91,7 @@ exports.getGroupChat = async (req,res,next)=>{
             ]
         })
 
-        console.trace(data);
+       // console.trace(data);
         res.send(data);
 
     }catch(err){
