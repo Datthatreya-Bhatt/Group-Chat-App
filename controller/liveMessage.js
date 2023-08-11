@@ -1,8 +1,10 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
-const {GroupsUser} = require('../models/database');
+const {GroupsUser,Chat} = require('../models/database');
+const sequelize = require('../models/sequelize');
 
+try{
 
 const io = require('socket.io')(3001, {
     cors: {
@@ -34,6 +36,7 @@ let auth = async(cred)=>{
 }
 
 
+
 io.on('connection', socket =>{
     
     socket.on('join-group',async group =>{
@@ -53,7 +56,29 @@ io.on('connection', socket =>{
         let pass = await auth(room);
         
         if(pass){
-            socket.to(pass.groupId).emit('receive-msg',msg)
+            socket.to(pass.groupId).emit('receive-msg',msg);
+
+            let t = await sequelize.transaction();
+
+            try{
+
+                let chat = await Chat.create({
+                    message: msg,
+                    from: pass.userId,
+                    to: pass.groupId,
+                    userId:pass.userId,
+                    groupId:pass.groupId,
+                    media: false
+                },{transaction: t}
+                );
+
+                t.commit();
+
+            }catch(err){
+                t.rollback()
+                console.trace(err);
+            }
+            
 
         }
         else{
@@ -63,3 +88,8 @@ io.on('connection', socket =>{
     })
 
 })
+
+
+}catch(err){
+    console.trace(err);
+}

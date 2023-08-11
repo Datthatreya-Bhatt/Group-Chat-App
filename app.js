@@ -9,6 +9,7 @@ const joinGroupRoute = require('./routes/joinGroup');
 const createGroupRoute = require('./routes/createGroup');
 const liveChatRoute = require('./routes/liveMessage');
 const adminRoute = require('./routes/admin');
+const uploadRoute = require('./routes/upload');
 
 
 
@@ -24,8 +25,8 @@ app.use(parser.urlencoded({extended:false}));
 app.use(parser.json());
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://www.youtube.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    origin: ['http://localhost:3000'],
+   // methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
 app.use(signupRoute);
@@ -35,6 +36,7 @@ app.use(joinGroupRoute);
 app.use(createGroupRoute);
 app.use(liveChatRoute);
 app.use(adminRoute);
+app.use(uploadRoute);
 
 
 

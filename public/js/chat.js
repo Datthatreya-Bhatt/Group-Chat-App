@@ -23,6 +23,10 @@ window.addEventListener('DOMContentLoaded',async()=>{
     document.getElementById('edit').addEventListener('click',async()=>{
         location.href = `${url}/admin`;
     });
+    
+
+    
+
 
     let data = await axios.get(`${url}/chat/groups`);
     
@@ -108,11 +112,11 @@ window.addEventListener('DOMContentLoaded',async()=>{
                        div.innerHTML = `${user.userName}: ${text}`;
                        right.appendChild(div);
 
-
-
                        socket.emit('send-msg-failed', err =>{
                             alert(err);
                        });
+
+
                     })
 
 
@@ -127,10 +131,42 @@ window.addEventListener('DOMContentLoaded',async()=>{
                         let div =  document.createElement('div');
                         div.className = "alert alert-primary";
 
-                        div.innerHTML = `${element.user.name}: ${element.message}`;
+                        if(element.media){
+                            let a = document.createElement('a');
+                            a.href = element.message;
+                            a.innerHTML = element.message;
+                            div.appendChild(a);
+
+                        }
+                        else{
+
+                            div.innerHTML = `${element.user.name}: ${element.message}`;
+                        }
+
                         right.appendChild(div);
-                    
+
                     })
+
+                    //multi media upload button event
+                    document.getElementById('upload').addEventListener('change',async(event)=>{
+                        const input = document.querySelector('input[type=file]').files;
+                        console.log(input[0]);
+                        const formData = new FormData();
+
+                        formData.append('file', input[0])
+
+                        let res = await axios.post(`${url}/chat/upload`, formData,{
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                            } )
+                        
+
+                        console.log(res);
+                        location.reload();
+                        
+                
+                    });
 
 
 

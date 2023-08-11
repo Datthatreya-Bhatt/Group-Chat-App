@@ -48,6 +48,11 @@ const Chat = sequelize.define('chat',{
     to: {
         type: DataTypes.INTEGER,
         allowNull: true
+    },
+    media: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 })
 

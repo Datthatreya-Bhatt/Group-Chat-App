@@ -82,7 +82,7 @@ exports.getGroupChat = async (req,res,next)=>{
         //console.trace(connected);
 
         let data = await Chat.findAll({
-            attributes : ['id','message', 'from', 'to'], 
+            attributes : ['id','message', 'from', 'to', 'media'], 
             where: {
                     to: connected
             },
