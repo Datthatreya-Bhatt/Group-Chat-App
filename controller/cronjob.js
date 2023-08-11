@@ -1,0 +1,68 @@
+const CronJob = require('cron').CronJob;
+const {Op} = require('sequelize');
+
+const { Chat, ArchivedChats } = require('../models/database');
+
+
+// Schedule the cron job to run every night
+exports.midNightWork = async()=>{
+  console.log('function executed');
+  new CronJob('* * * * *', async () => {
+  console.log('cron executed');
+
+  try {
+
+   
+    let today = new Date();
+    today.setDate(today.getDate() - 1);
+    console.log(today);
+
+
+
+    const oneDayAgo =  today;
+
+    // Fetch 1 day old chats
+    const chatsToArchive = await Chat.findAll({
+      where: {
+        createdAt: {
+          [Op.lt]: oneDayAgo,
+        },
+      },
+    });
+
+    console.trace(chatsToArchive);
+
+    // Move chats to ArchivedChats table
+    await Promise.all(
+      chatsToArchive.map(async (chat) => {
+        await ArchivedChats.create({
+          message: chat.message,
+          from: chat.from,
+          to: chat.to,
+          createdAt: chat.createdAt,
+          updatedAt: chat.updatedAt,
+        });
+      })
+    );
+
+    // Delete the archived chats from Chat table
+    await Chat.destroy({
+      where: {
+        createdAt: {
+          [Op.lt]: oneDayAgo,
+        },
+      },
+    });
+
+    console.log('Cron job completed successfully');
+  } catch (err) {
+    console.trace(err);
+  }
+
+}
+, null,
+true,
+'America/Los_Angeles'
+
+
+)};

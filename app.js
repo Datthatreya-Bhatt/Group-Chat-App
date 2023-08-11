@@ -12,6 +12,10 @@ const adminRoute = require('./routes/admin');
 const uploadRoute = require('./routes/upload');
 
 
+const cronjob = require('./controller/cronjob');
+
+
+
 
 
 
@@ -38,6 +42,7 @@ app.use(liveChatRoute);
 app.use(adminRoute);
 app.use(uploadRoute);
 
+cronjob.midNightWork();
 
 
 app.listen(process.env.PORT || 3000);

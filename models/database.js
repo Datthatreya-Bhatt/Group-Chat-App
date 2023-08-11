@@ -86,6 +86,33 @@ const Group = sequelize.define('group',{
         defaultValue: false
     }
  })
+
+ const ArchivedChats = sequelize.define('archived',{
+    id:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        unique: true,
+        primaryKey: true
+    },
+    message:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    from:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    to: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    media: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    }
+ })
  
 
 
@@ -122,6 +149,7 @@ module.exports = {
     User: User,
     Chat: Chat,
     Group: Group,
-    GroupsUser: GroupsUser
+    GroupsUser: GroupsUser,
+    ArchivedChats: ArchivedChats
 }
 
