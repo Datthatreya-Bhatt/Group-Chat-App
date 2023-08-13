@@ -35,6 +35,7 @@ exports.postChat = async(req,res,next)=>{
     }catch(err){
         await t.rollback();
         console.trace(err);
+        res.send({error: err});
     }
 
 }
@@ -67,6 +68,8 @@ exports.getGroups = async(req,res,next)=>{
         }
     }catch(err){
         console.trace(err);
+        res.send({error: err});
+
     }
 
 
@@ -93,6 +96,7 @@ exports.getGroupChat = async (req,res,next)=>{
         res.send(data);
 
     }catch(err){
+        res.send({error: err});
         console.trace(err);
     }
 };

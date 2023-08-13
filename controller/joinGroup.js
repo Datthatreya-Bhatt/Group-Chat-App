@@ -23,6 +23,7 @@ exports.getGroupName = async(req,res,next)=>{
         //console.trace(link, name);
 
     }catch(err){
+        res.send({error: err});
         console.trace(err);
     }
 }
@@ -48,6 +49,7 @@ exports.joinGroup = async(req,res,next)=>{
         await t.commit();
     }catch(err){
         await t.rollback();
+        res.send({error: err});
         console.trace(err);
     }
 }

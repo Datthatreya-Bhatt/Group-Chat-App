@@ -41,6 +41,7 @@ exports.postLogin = async (req,res,next)=>{
 
 
     }catch(err){
+        res.send({error: err});
         console.trace(err);
     }
 

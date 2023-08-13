@@ -26,6 +26,7 @@ exports.getMembers = async(req,res,next)=>{
         res.send(data);
 
     }catch(err){
+        res.send({error: err});
         console.trace(err);
     }
 };
@@ -81,6 +82,7 @@ exports.addfriend = async(req,res,next)=>{
         await t.commit();
     }catch(err){
         await t.rollback();
+        res.send({error: err});
         console.trace(err);
     }
 
@@ -127,6 +129,7 @@ exports.addAdmin = async(req,res,next)=>{
         await t.commit();
 
     }catch(err){
+        res.send({error: err});
         console.trace(err);
     }
 }; 
@@ -169,6 +172,7 @@ exports.removeUser = async(req,res,next)=>{
      await t.commit();
 
     }catch(err){
+        res.send({error: err});
         console.trace(err);
     }
 

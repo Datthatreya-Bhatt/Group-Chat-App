@@ -53,6 +53,7 @@ exports.createGroup = async(req,res,next)=>{
 
     }catch(err){
         await t.rollback();
+        res.send({error: err});
         console.trace(err);
     }
 };

@@ -56,7 +56,8 @@ exports.midNightWork = async()=>{
 
     console.log('Cron job completed successfully');
   } catch (err) {
-    console.trace(err);
+        res.send({error: err});
+        console.trace(err);
   }
 
 }

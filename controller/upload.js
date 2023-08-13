@@ -56,6 +56,7 @@ exports.uploadS3 = async(req,res,next) =>{
 
     }catch(err){
         t.rollback();
+        res.send({error: err});
         console.trace(err);
     }
 
