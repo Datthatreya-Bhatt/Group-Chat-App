@@ -53,11 +53,11 @@ exports.uploadS3 = async(req,res,next) =>{
 
         res.send(chat);
 
-        t.commit();
+        await t.commit();
 
     }catch(err){
-        t.rollback();
-        res.send({error: `S3 upload error${err}`});
+        await t.rollback();
+        res.send({error: `S3 upload error${err , S3res}`});
         console.trace(err);
     }
 
