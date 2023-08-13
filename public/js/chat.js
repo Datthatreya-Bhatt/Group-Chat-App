@@ -1,5 +1,3 @@
-
-
 window.addEventListener('DOMContentLoaded',async()=>{
 
 
@@ -23,8 +21,6 @@ window.addEventListener('DOMContentLoaded',async()=>{
     document.getElementById('edit').addEventListener('click',async()=>{
         location.href = `${url}/admin`;
     });
-    
-
     
 
 

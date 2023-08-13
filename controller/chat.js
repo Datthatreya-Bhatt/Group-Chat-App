@@ -23,8 +23,6 @@ exports.postChat = async(req,res,next)=>{
 
         let chat = await Chat.create({
             message: text,
-            from: id,
-            to: connected,
             userId: id,
             groupId: connected
         },{transaction: t}
@@ -82,9 +80,9 @@ exports.getGroupChat = async (req,res,next)=>{
         //console.trace(connected);
 
         let data = await Chat.findAll({
-            attributes : ['id','message', 'from', 'to', 'media'], 
+            attributes : ['id','message', 'userId', 'groupId', 'media'], 
             where: {
-                    to: connected
+                    groupId: connected
             },
             include: [
                 {model: User, attributes: ['name']},

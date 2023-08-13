@@ -64,10 +64,8 @@ io.on('connection', socket =>{
 
                 let chat = await Chat.create({
                     message: msg,
-                    from: pass.userId,
-                    to: pass.groupId,
-                    userId:pass.userId,
-                    groupId:pass.groupId,
+                    userId: pass.userId,
+                    groupId: pass.groupId,
                     media: false
                 },{transaction: t}
                 );

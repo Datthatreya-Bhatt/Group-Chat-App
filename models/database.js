@@ -41,14 +41,6 @@ const Chat = sequelize.define('chat',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    from:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    to: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },
     media: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -99,18 +91,18 @@ const Group = sequelize.define('group',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    from:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    to: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },
     media: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+    },
+    groupId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
  })
  

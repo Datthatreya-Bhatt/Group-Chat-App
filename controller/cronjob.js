@@ -37,8 +37,8 @@ exports.midNightWork = async()=>{
       chatsToArchive.map(async (chat) => {
         await ArchivedChats.create({
           message: chat.message,
-          from: chat.from,
-          to: chat.to,
+          userId: chat.userId,
+          groupId: chat.groupId,
           createdAt: chat.createdAt,
           updatedAt: chat.updatedAt,
         });

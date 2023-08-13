@@ -9,12 +9,11 @@ const services = require('../services/s3service');
 
 
 try{
+        
+    // Configure multer for file upload
+    const storage = multer.memoryStorage(); // Store files in memory as buffers i have to stream the file s3 in next optimization
+    exports.upload = multer({ storage: storage });
 
-
-// // Configure multer for file upload
-const storage = multer.memoryStorage(); // Store files in memory as buffers i have to stream the file s3 in next optimization
-
-exports.upload = multer({ storage: storage });
 }catch(err){
     console.trace(err);
 }
@@ -45,8 +44,6 @@ exports.uploadS3 = async(req,res,next) =>{
 
         let chat = await Chat.create({
             message: S3res.Location,
-            from: id,
-            to: connected,
             userId: id,
             groupId: connected,
             media: true
