@@ -36,17 +36,17 @@ exports.createGroup = async(req,res,next)=>{
              transaction: t
 
         })
-        //adding relation in junction table
-        await data[0].addUser(user, {
-            through: { admin: true }, // Setting admin to true for the user who created the group
-            transaction: t,
-          });
 
         if(data[0].createdBy != user){
             res.send('failed');
         }
         else{
             res.send(data[0]);
+            //adding relation in junction table
+            await data[0].addUser(user, {
+                through: { admin: true }, // Setting admin to true for the user who created the group
+                transaction: t,
+            });
         }
         console.trace(data);
         await t.commit();
