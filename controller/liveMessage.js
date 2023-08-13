@@ -70,14 +70,30 @@ io.on('connection', socket =>{
                 },{transaction: t}
                 );
 
-                t.commit();
+                await t.commit();
 
             }catch(err){
-                t.rollback()
+                await t.rollback()
                 console.trace(err);
             }
             
 
+        }
+        else{
+            //sending event to frontend
+            socket.emit('send-message-failed', 'You have no permission');
+        }
+    })
+
+
+    socket.on('media-sent', async (room)=>{
+        
+        let pass = await auth(room);
+        
+        if(pass){
+            socket.to(pass.groupId).emit('reload','test');
+            console.trace('reload received')
+            
         }
         else{
             //sending event to frontend

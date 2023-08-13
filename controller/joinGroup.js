@@ -30,8 +30,6 @@ exports.getGroupName = async(req,res,next)=>{
 
 exports.joinGroup = async(req,res,next)=>{
     let t = await sequelize.transaction();
-    //let t2 = await sequelize.transaction();
-
 
     try{
         let user = Number(req.userId.token);

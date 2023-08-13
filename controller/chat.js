@@ -9,7 +9,7 @@ exports.chatPage = (req,res,next)=>{
     res.sendFile(path.join(__dirname, '../', 'public', 'chat.html'));
 }
 
-
+//chatting is done with socket, so i dont think we need this function
 exports.postChat = async(req,res,next)=>{
     let t = await sequelize.transaction();
 

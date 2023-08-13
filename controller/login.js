@@ -13,7 +13,6 @@ exports.loginPage = (req,res,next)=>{
 }
 
 exports.postLogin = async (req,res,next)=>{
-    let t = await sequelize.transaction();
 
     try{
         let {email, password} = req.body;
@@ -29,18 +28,6 @@ exports.postLogin = async (req,res,next)=>{
             if(hash){
                 
                 let token = jwt.sign(user.id, process.env.JSON_SECRET_KEY);
-
-                let data = await User.update({
-                    loggedIn: true
-                },{
-                    where:{
-                        id: user.id
-                    },
-                    transaction: t
-
-                })
-
-                //console.trace(token, hash);
                 
                 res.send({token: token, userName:user.name});
             }
@@ -52,10 +39,8 @@ exports.postLogin = async (req,res,next)=>{
             res.send('email incorrect');
         }
 
-        await t.commit();
 
     }catch(err){
-        await t.rollback();
         console.trace(err);
     }
 
