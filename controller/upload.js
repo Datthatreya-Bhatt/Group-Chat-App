@@ -1,5 +1,6 @@
 require('dotenv').config();
 const aws = require('aws-sdk');
+const multer = require('multer');
 
 
 const {Chat} = require('../models/database');
@@ -7,9 +8,19 @@ const sequelize = require('../models/sequelize');
 const services = require('../services/s3service');
 
 
+try{
 
 
-exports.upload = async(req,res,next) =>{
+// // Configure multer for file upload
+const storage = multer.memoryStorage(); // Store files in memory as buffers i have to stream the file s3 in next optimization
+
+exports.upload = multer({ storage: storage });
+}catch(err){
+    console.trace(err);
+}
+
+
+exports.uploadS3 = async(req,res,next) =>{
     let t = await sequelize.transaction();
 
     try{

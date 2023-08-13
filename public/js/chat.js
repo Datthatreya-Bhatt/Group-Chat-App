@@ -134,7 +134,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
                         if(element.media){
                             let a = document.createElement('a');
                             a.href = element.message;
-                            a.innerHTML = element.message;
+                            a.innerHTML = `${element.user.name}: ${element.message}`;
                             div.appendChild(a);
 
                         }
