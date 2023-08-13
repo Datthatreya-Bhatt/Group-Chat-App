@@ -15,6 +15,7 @@ try{
     exports.upload = multer({ storage: storage });
 
 }catch(err){
+    res.send({error: `multer error${err}`})
     console.trace(err);
 }
 
@@ -56,7 +57,7 @@ exports.uploadS3 = async(req,res,next) =>{
 
     }catch(err){
         t.rollback();
-        res.send({error: err});
+        res.send({error: `S3 upload error${err}`});
         console.trace(err);
     }
 
