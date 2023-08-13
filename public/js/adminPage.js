@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', async()=>{
 
+    // let url = 'http://localhost:3000';
     let url = 'http://18.207.218.243';
 
     let token = localStorage.getItem('token');

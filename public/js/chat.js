@@ -2,12 +2,13 @@ window.addEventListener('DOMContentLoaded',async()=>{
 
 
     let url = 'http://18.207.218.243';
+    // let url = 'http://localhost:3000';
 
 
     // in future im planning to use linked list rather than using array in local storage
 
     // to connecting backend server
-    const socket = io('http://18.207.218.243:3001');
+    const socket = io('http://localhost:3001');
 
 
     let token = localStorage.getItem('token');
@@ -22,7 +23,55 @@ window.addEventListener('DOMContentLoaded',async()=>{
     document.getElementById('edit').addEventListener('click',async()=>{
         location.href = `${url}/admin`;
     });
+
+
     
+    socket.on('join-group-failed', err =>{
+        alert(err);
+    });
+
+                        
+    socket.on('receive-msg',(msg)=>{
+        let right = document.getElementById('right');
+
+        let div =  document.createElement('div');
+        div.className = "alert alert-primary";
+
+        
+        div.innerHTML = `${msg}`;
+        right.appendChild(div);
+    });
+    
+    socket.on('send-msg-failed', err =>{
+        alert(err);
+    });
+
+
+    
+    document.getElementById('send').addEventListener('click', async ()=>{
+                         
+        let user = localStorage.getItem('token');
+        let header = localStorage.getItem('token');
+        user = JSON.parse(user);
+
+        let text = document.getElementById('text').value;
+            
+        //let res = await axios.post(`${url}/chat`,{text:text});
+        // console.log(text);
+        socket.emit('send-msg',`${user.userName}: ${text}`, header);
+
+        let right = document.getElementById('right');
+
+        let div =  document.createElement('div');
+        div.className = "alert alert-primary";
+
+        
+        div.innerHTML = `${user.userName}: ${text}`;
+        right.appendChild(div);
+
+        
+
+    })
 //----------------------------------------------------------------------------------//
 
 
@@ -92,47 +141,7 @@ if(local_data === null){
 
                     socket.emit('join-group', header);
 
-                    socket.on('join-group-failed', err =>{
-                        alert(err);
-                    });
 
-                                        
-                    socket.on('receive-msg',(msg)=>{
-                        let right = document.getElementById('right');
-
-                        let div =  document.createElement('div');
-                        div.className = "alert alert-primary";
-
-                        
-                        div.innerHTML = `${msg}`;
-                        right.appendChild(div);
-                    });
-
-                    document.getElementById('send').addEventListener('click', async ()=>{
-                         
-                        let user = localStorage.getItem('token');
-                        user = JSON.parse(user);
-
-                        let text = document.getElementById('text').value;
-                            
-                        //let res = await axios.post(`${url}/chat`,{text:text});
-                        // console.log(text);
-                        socket.emit('send-msg',`${user.userName}: ${text}`, header);
-
-                        let right = document.getElementById('right');
-
-                        let div =  document.createElement('div');
-                        div.className = "alert alert-primary";
-
-                        
-                        div.innerHTML = `${user.userName}: ${text}`;
-                        right.appendChild(div);
-
-                        socket.emit('send-msg-failed', err =>{
-                                alert(err);
-                        });
-
-                    })
 
 
                     // getting messages

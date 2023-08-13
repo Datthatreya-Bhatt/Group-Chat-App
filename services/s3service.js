@@ -44,7 +44,7 @@ exports.uploadToS3 = async (data, fileName)=>{
     }
     catch(err){
       console.trace(err);
-      return err;
+      return `${err}`;
     }
     
    
