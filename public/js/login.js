@@ -24,7 +24,7 @@ document.getElementById('button').addEventListener('click',async()=>{
         token.connected = null;
         token = JSON.stringify(token);
         localStorage.setItem('token',`${token}`);
-        location.href = 'http://localhost:3000/chat';
+        location.href = `${url}/chat`;
         
     }
 })
