@@ -29,8 +29,8 @@ app.use(parser.urlencoded({extended:false}));
 app.use(parser.json());
 
 app.use(cors({
-    origin: ['http://localhost:3000'],
-   // methods: ['GET', 'POST', 'PUT', 'DELETE']
+    origin: ['http://18.207.218.243'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
 app.use(signupRoute);
