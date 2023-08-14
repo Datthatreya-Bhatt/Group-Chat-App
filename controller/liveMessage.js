@@ -56,7 +56,7 @@ io.on('connection', socket =>{
         let pass = await auth(room);
         
         if(pass){
-            socket.to(pass.groupId).emit('receive-msg',msg);
+            socket.to(pass.groupId).emit('receive-msg',{msg: msg, g: pass.groupId});
 
             let t = await sequelize.transaction();
 

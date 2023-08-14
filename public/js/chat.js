@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
     // in future im planning to use linked list rather than using array in local storage
 
     // to connecting backend server
-    const socket = io('http://localhost:3001');
+    const socket = io('http://18.207.218.243:3001');
 
 
     let token = localStorage.getItem('token');
@@ -31,22 +31,30 @@ window.addEventListener('DOMContentLoaded',async()=>{
     });
 
                         
-    socket.on('receive-msg',(msg)=>{
-        let right = document.getElementById('right');
-
-        let div =  document.createElement('div');
-        div.className = "alert alert-primary";
-
-        
-        div.innerHTML = `${msg}`;
-        right.appendChild(div);
-    });
+   
     
     socket.on('send-msg-failed', err =>{
         alert(err);
     });
 
 
+    socket.on('receive-msg',(data)=>{
+        let token = localStorage.getItem('token');
+        token = JSON.parse(token);
+
+        if(token.connected == data.g){
+            
+            let right = document.getElementById('right');
+
+            let div =  document.createElement('div');
+            div.className = "alert alert-primary";
+
+            
+            div.innerHTML = `${data.msg}`;
+            right.appendChild(div);
+        }
+
+    });
     
     document.getElementById('send').addEventListener('click', async ()=>{
                          
@@ -140,6 +148,7 @@ if(local_data === null){
                    
 
                     socket.emit('join-group', header);
+
 
 
 
