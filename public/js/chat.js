@@ -80,6 +80,33 @@ window.addEventListener('DOMContentLoaded',async()=>{
         
 
     })
+
+
+    //multi media upload button event
+    document.getElementById('upload').addEventListener('change',async(event)=>{
+        let header = localStorage.getItem('token');
+
+        const input = document.querySelector('input[type=file]').files;
+        console.log(input[0]);
+        const formData = new FormData();
+
+        formData.append('file', input[0])
+
+        let res = await axios.post(`${url}/chat/upload`, formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+            } )
+
+        socket.emit('media-sent', header);
+        
+        
+
+        console.log(res);
+        location.reload();
+        
+
+    });
 //----------------------------------------------------------------------------------//
 
 
@@ -193,29 +220,7 @@ if(local_data === null){
 
 
 
-                    //multi media upload button event
-                    document.getElementById('upload').addEventListener('change',async(event)=>{
-                        const input = document.querySelector('input[type=file]').files;
-                        console.log(input[0]);
-                        const formData = new FormData();
-
-                        formData.append('file', input[0])
-
-                        let res = await axios.post(`${url}/chat/upload`, formData,{
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
-                            }
-                            } )
-
-                        socket.emit('media-sent', header);
-                        
-                        
-
-                        console.log(res);
-                        location.reload();
-                        
-                
-                    });
+              
 
 
                     socket.on('reload', (test)=>{
