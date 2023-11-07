@@ -55,7 +55,7 @@ exports.postSignup = async (req,res,next)=>{
 
                     
                 }catch(err){
-                    t.rollback();
+                    await t.rollback();
                     console.trace(err);
                     res.send('failed');
 

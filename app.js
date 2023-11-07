@@ -11,7 +11,6 @@ const liveChatRoute = require('./routes/liveMessage');
 const adminRoute = require('./routes/admin');
 const uploadRoute = require('./routes/upload');
 
-
 const cronjob = require('./controller/cronjob');
 
 

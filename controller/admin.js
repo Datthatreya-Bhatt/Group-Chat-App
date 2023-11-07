@@ -129,6 +129,7 @@ exports.addAdmin = async(req,res,next)=>{
         await t.commit();
 
     }catch(err){
+        await t.rollback();
         res.send({error: err});
         console.trace(err);
     }
@@ -172,6 +173,7 @@ exports.removeUser = async(req,res,next)=>{
      await t.commit();
 
     }catch(err){
+        await t.rollback();
         res.send({error: err});
         console.trace(err);
     }

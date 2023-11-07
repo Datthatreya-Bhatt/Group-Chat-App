@@ -8,7 +8,7 @@ try{
 
 const io = require('socket.io')(3001, {
     cors: {
-        origin: ['http://18.207.218.243']
+        origin: ['http://localhost:3000']
     }
 });
 
@@ -27,7 +27,7 @@ let auth = async(cred)=>{
         })
 
         if(data.userId === id && data.groupId === cred.connected){
-        return data
+            return data
         }
         return false
     }catch(err){
